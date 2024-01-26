@@ -4,5 +4,6 @@ class Message {
     this.key = key;
     this.exptime = exptime;
     this.byteCount = byteCount;
+    //comment
   }
 }
