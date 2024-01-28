@@ -1,6 +1,6 @@
 const { Message } = require("./classes");
 
-module.exports.parseSetMessage = (message) => {
+module.exports.parseMessage = (message) => {
   message = message.split(" ");
   const name = message[0];
   const key = message[1];

@@ -1,5 +1,5 @@
 const { Data } = require("./classes.js");
-const { parseSetMessage, parseGetMessage } = require("./parser.js");
+const { parseMessage, parseGetMessage } = require("./parser.js");
 
 module.exports.handleSetAddReplaceRequest = (
   data,
@@ -11,8 +11,7 @@ module.exports.handleSetAddReplaceRequest = (
   //now we have to check if we have entered 2 messages
   const com = data.split("\r\n");
   if (com.length === 3) {
-    console.log("entered set handler");
-    const message = parseSetMessage(com[0]);
+    const message = parseMessage(com[0]);
     const type = message.name;
 
     if (
@@ -92,10 +91,9 @@ module.exports.handlePrependAppend = (
   socket,
   storage
 ) => {
-  console.log("------------entered prepend/append handler-------------");
   const com = data.split("\r\n");
   if (com.length === 3) {
-    const message = parseSetMessage(com[0]);
+    const message = parseMessage(com[0]);
     const key = message.key;
 
     //if the value does not exist then dont proceed
