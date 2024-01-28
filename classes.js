@@ -1,10 +1,11 @@
 class Message {
-  constructor(name, key, flag, exptime, byteCount) {
-    this.name = name;
-    this.key = key;
-    this.flag = flag;
-    this.exptime = exptime;
-    this.byteCount = byteCount;
+  constructor(options) {
+    this.name = options.name;
+    this.key = options.key;
+    this.flag = options.flag;
+    this.exptime = options.exptime;
+    this.byteCount = options.byteCount;
+    this.noreply = options.noreply;
   }
 }
 
