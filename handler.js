@@ -99,7 +99,7 @@ module.exports.handlePrependAppend = (
     const key = message.key;
 
     //if the value does not exist then dont proceed
-    if (!storage.get(socket) && !storage.get(socket).get(key)) {
+    if (!storage.get(socket) || !storage.get(socket).get(key)) {
       serverEndPointSocket.write("NOT STORED\r\n");
       return "";
     }
