@@ -10,10 +10,15 @@ class Message {
 
 class Data {
   //'value' corresponding to each key
-  constructor(datablock, flag, byteCount) {
+  constructor(datablock, flag, byteCount, expirationtime) {
     this.datablock = datablock;
     this.flag = flag;
     this.byteCount = byteCount;
+    this.expirationtime = expirationtime;
+  }
+
+  hasExpired() {
+    return new Date() >= this.expirationtime;
   }
 }
 
