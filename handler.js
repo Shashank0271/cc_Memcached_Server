@@ -1,7 +1,7 @@
 const { Data } = require("./classes.js");
 const { parseSetMessage, parseGetMessage } = require("./parser.js");
 
-module.exports.handleSetRequest = (
+module.exports.handleSetAddReplaceRequest = (
   data,
   serverEndPointSocket,
   socket,
@@ -13,6 +13,25 @@ module.exports.handleSetRequest = (
   const com = data.split("\r\n");
   if (com.length === 3) {
     const message = parseSetMessage(com[0]);
+    const type = message.name;
+
+    if (
+      type === "add" &&
+      storage.get(socket) &&
+      storage.get(socket).get(message.key)
+    ) {
+      //add command stores the data only if the server doesn't already hold the data
+      serverEndPointSocket.write("NOT_STORED\r\n");
+      return "";
+    }
+
+    if (
+      type === "replace" &&
+      (!storage.get(socket) || !storage.get(socket).get(message.key))
+    ) {
+      serverEndPointSocket.write("NOT_STORED\r\n");
+      return "";
+    }
 
     const dataBlock = com[1].substring(0, message.byteCount);
 
@@ -21,6 +40,7 @@ module.exports.handleSetRequest = (
     }
 
     let expirationTime;
+
     if (message.exptime !== 0) {
       const currentTime = new Date();
       expirationTime = new Date(currentTime);
@@ -52,7 +72,6 @@ module.exports.handleGetRequest = (
   const message = parseGetMessage(data);
   const key = message.key;
   const requiredData = storage.get(socket).get(key);
-
   if (!requiredData) {
     serverEndPointSocket.write("END\r\n");
   } else if (requiredData.hasExpired()) {
@@ -60,9 +79,7 @@ module.exports.handleGetRequest = (
     serverEndPointSocket.write("END\r\n");
   } else {
     serverEndPointSocket.write(
-      `VALUE ${key} ${requiredData.flag} ${requiredData.byteCount} \r\n${requiredData.datablock} \r\n`
+      `VALUE ${key} ${requiredData.flag} ${requiredData.byteCount} \r\n${requiredData.datablock}\r\n`
     );
   }
-
-  data = "";
 };
