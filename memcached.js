@@ -2,6 +2,7 @@ const { MemeCachedClient } = require("./classes.js");
 const {
   handleSetAddReplaceRequest,
   handleGetRequest,
+  handlePrependAppend,
 } = require("./handler.js");
 const net = require("net");
 let port = 11211;
@@ -42,6 +43,10 @@ module.exports.startServer = (options) => {
       else if (data.startsWith("get")) {
         handleGetRequest(data, serverEndPointSocket, socket, storage);
         data = "";
+      }
+      //PREPEND APPEND
+      else if (data.startsWith("prepend") || data.startsWith("append")) {
+        data = handlePrependAppend(data, serverEndPointSocket, socket, storage);
       }
     });
   });
