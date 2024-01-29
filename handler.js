@@ -57,8 +57,6 @@ module.exports.handleSetAddReplaceRequest = (
 
     if (!message.noreply) {
       serverEndPointSocket.write("STORED\r\n");
-    } else {
-      serverEndPointSocket.write("STORED\r\n");
     }
   }
   return data;
@@ -80,7 +78,7 @@ module.exports.handleGetRequest = (
     serverEndPointSocket.write("END\r\n");
   } else {
     serverEndPointSocket.write(
-      `VALUE ${key} ${requiredData.flag} ${requiredData.byteCount} \r\n${requiredData.datablock}\r\n`
+      `VALUE ${key} ${requiredData.flag} ${requiredData.byteCount} \r\n${requiredData.datablock}\r\nEND\r\n`
     );
   }
 };
